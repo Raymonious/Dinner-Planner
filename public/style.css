@@ -2,3 +2,15 @@
 .debug {
     border-style:solid;
 }
+
+.r-aligned{
+    text-align: right;
+}
+
+.c-aligned{
+    text-align: center;
+}
+
+.bold{
+    font-weight: bold;
+}
