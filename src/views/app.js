@@ -1,5 +1,3 @@
-
-
 /* 
    This component uses Vue-specific and React-specific presenters: Sidebar, Summary, Search, Details, Show 
    Therefore it needs to import from alternative paths, depending on the framework. 
@@ -13,9 +11,10 @@ const Sidebar=require("../"+PREFIX+"/sidebarPresenter.js").default;
 export default
 function App(props){
     return (<div>
-                {/* TODO TW1.5 Sidebar will be added here, inside a DIV, like Summary below */}
-                <div><Sidebar model={props.model} /></div>
-                <div><Summary model={props.model} /></div>
+                <div class="flexParent">
+                <div><Sidebar class="sidebar" model={props.model} /></div>
+                <div><Summary class="mainContent" model={props.model} /></div>
+                </div>
             </div>
            );
 }
