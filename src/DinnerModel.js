@@ -1,4 +1,3 @@
-import { createAssignmentExpression } from "@vue/compiler-core";
 
 /* This is an example of a JavaScript class.
    The Model keeps only abstract data and has no notions of graphics or interaction
@@ -12,14 +11,14 @@ class DinnerModel{
     }
     setNumberOfGuests(nr){
         // if() and throw exercise
-        
         // TODO throw an Error /* new Error(someMessage) */ if the argument is smaller than 1 or not an integer
         if(nr < 1 || !Number.isInteger(nr))
             throw new Error("number of guests not a positive integer");
 
         // The error message must be exactly "number of guests not a positive integer"
         // To learn how to check for integer, test at the Developer Tools Console: Number.isInteger(3.14)
-        
+        if(!Number.isInteger(nr) || nr < 1)
+            throw new Error("number of guests not a positive integer");
         // TODO if the argument is a valid number of guests, store it in this.numberOfGuests
         else 
             this.numberOfGuests = nr;
@@ -35,8 +34,8 @@ class DinnerModel{
     removeFromMenu(dishToRemove){
         // callback exercise! Also return keyword exercise
         function hasSameIdCB(dish){
+            return dish.id !== dishToRemove.id
             // TODO return true if the id property of dish is _different_ from the dishToRemove's id property
-            return dish.id !== dishToRemove.id;
             // This will keep the dish when we filter below.
             // That is, we will not keep the dish that has the same id as dishToRemove (if any)
         }

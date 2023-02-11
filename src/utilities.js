@@ -19,8 +19,7 @@ function compareIngredientsCB(ingredientA, ingredientB){
   Note that sort() will change the original array. To avoid that, use [...ingredients] which creates a new array and spreads the elements of the `ingredients` array.
 */
 function sortIngredients(ingredients){
-    const temp = [...ingredients];
-    return temp.sort(compareIngredientsCB);
+    return [...ingredients].sort(compareIngredientsCB);// TODO
 }
 
 // helper object for isKnownType and dish sorting
@@ -32,11 +31,11 @@ const dishTypeRanking={
 };
 
 function isKnownTypeCB(type){
+    return dishTypeRanking[type];
     // TODO look up type in dishTypeRanking. In case it is found, return true (or truthy, i.e. anything not falsy, see below).
     // otherwise return falsy (false, 0, undefined, or "")
     // Remember the object[key] syntax! It returns undefined if the key is not present in the object.
     // Optional: using truthy / falsy you can write this without if() ! 
-    return dishTypeRanking[type];
 }
 
 /* dish.dishTypes will contain an array of dish types, of which we have to pick one that is known.
@@ -51,12 +50,11 @@ function dishType(dish){
     else
         return "";
 }
-
 /* 
    Write a sort() comparator callback that compares dishes by their type, 
    so that all starters come before main courses and main courses come before desserts 
 */
-function dishTypeCompareCB(dishA, dishB){
+function compareDishesCB(dishA, dishB){
     return (dishTypeRanking[dishType(dishA)] - dishTypeRanking[dishType(dishB)]);
     
     // use dishType(dishA) and dishType(dishB)
@@ -70,8 +68,7 @@ function dishTypeCompareCB(dishA, dishB){
    Sort the dishes using the comparator callback above.
 */
 function sortDishes(dishes){
-    const temp = [...dishes];
-    return temp.sort(dishTypeCompareCB);
+    return [...dishes].sort(compareDishesCB);//TODO
 }
 
 /* 
@@ -124,20 +121,16 @@ function shoppingList(dishes){
 
 /* Given a dish array, calculate their total price with a map-reduce callback exercise */
 function menuPrice(dishesArray){
-    // TODO callback1: given a dish, return its price. Look in /test/dishesConst.js to find out the name of the dish price property. 
-    function dishPriceFinderCB(dish){
+    function dishPriceCB(dish){
         return dish.pricePerServing;
     }
-    // TODO callback2, with two parameters. Return the sum of the parameters
+    
     function dishPriceSumCB(accum, price){
         return accum + price;
     }
     // TODO set proper names to the callbacks!
-    
+    return dishesArray.map(dishPriceCB).reduce(dishPriceSumCB, 0);
     // TODO 1) call dishesArray.map() with callback1 as argument. This will return an array of prices.
-    const priceArray = dishesArray.map(dishPriceFinderCB);
-    // TODO 2) on the array of prices, call reduce() with callback2 as first parameter, and 0 as second parameter (we compute the total starting from zero).
-    return priceArray.reduce(dishPriceSumCB,0);
     //        This will produce the total price, which you return
 }
 
@@ -147,7 +140,7 @@ function menuPrice(dishesArray){
 */
 
 
-export {compareIngredientsCB, sortIngredients, isKnownTypeCB, dishType, sortDishes, shoppingList, menuPrice,/*TODO add more here! */};
+export {compareIngredientsCB, sortIngredients, isKnownTypeCB, dishType, compareDishesCB, sortDishes, shoppingList, menuPrice};
 
 /*
   Optional: once you are done with the whole TW1, 

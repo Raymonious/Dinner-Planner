@@ -1,6 +1,5 @@
 // un-comment when needed:
 import {sortIngredients} from "../utilities.js";
-
 /* Functional JSX component. Name must start with capital letter */
 function SummaryView(props){
     return (
@@ -14,7 +13,8 @@ function SummaryView(props){
                     <th>Quantity</th>
                     <th>unit</th>
                   </tr>
-                </thead>                
+                </thead>   
+                            
                 <tbody>
                   {  //  <---- in JSX/HTML, with this curly brace, we go back to JavaScript expressions
                       // TODO: un-comment and pass the CB below for array rendering!
@@ -23,7 +23,8 @@ function SummaryView(props){
 
                       // TODO once the table rendering works, sort ingredients before mapping. Import the needed function from utilities.js  
                   }
-                </tbody>
+                </tbody> 
+                
               </table>
             </div>
     );
@@ -33,9 +34,9 @@ function SummaryView(props){
     */
     function ingredientTableRowCB(ingr){
         return <tr key={ingr.id} >
-                 <td class="c-aligned">{ingr.name}</td>
-                 <td class="c-aligned">{ingr.aisle}</td>
-                 <td class="r-aligned">{/* multiply by number of people! Display with 2 decimals, use a CSS classs to align right */
+                 <td class="center">{ingr.name}</td>
+                 <td class="center">{ingr.aisle}</td>
+                 <td class="right">{/* multiply by number of people! Display with 2 decimals, use a CSS classs to align right */
                   (ingr.amount * props.people).toFixed(2)
                  }</td>
                  <td>{ingr.unit}</td>
