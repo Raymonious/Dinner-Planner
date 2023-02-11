@@ -2,6 +2,14 @@
 function compareIngredientsCB(ingredientA, ingredientB){
     // each ingredient object has aisle and name properties.
     // TODO: compare ingredients by supermarket aisle. If the aisles are the same, compare them by name
+    if(ingredientA.aisle > ingredientB.aisle)
+        return 1;
+    if(ingredientA.aisle < ingredientB.aisle)
+        return -1;
+    if(ingredientA.name > ingredientB.name)
+        return 1;
+    if(ingredientA.name < ingredientB.name)
+        return -1;
     // see Array.sort() documentation
     // TODO find the export line below and export this function!
 }
@@ -12,7 +20,7 @@ function compareIngredientsCB(ingredientA, ingredientB){
   Note that sort() will change the original array. To avoid that, use [...ingredients] which creates a new array and spreads the elements of the `ingredients` array.
 */
 function sortIngredients(ingredients){
-    return // TODO
+    return [...ingredients].sort(compareIngredientsCB);// TODO
 }
 
 // helper object for isKnownType and dish sorting
@@ -24,6 +32,7 @@ const dishTypeRanking={
 };
 
 function isKnownTypeCB(type){
+    return dishTypeRanking[type];
     // TODO look up type in dishTypeRanking. In case it is found, return true (or truthy, i.e. anything not falsy, see below).
     // otherwise return falsy (false, 0, undefined, or "")
     // Remember the object[key] syntax! It returns undefined if the key is not present in the object.
@@ -35,14 +44,20 @@ function isKnownTypeCB(type){
   If a known type cannot be determined, return "" 
 */
 function dishType(dish){
+    if(!dish.dishTypes)
+        return "";
+    if(dish.dishTypes.find(isKnownTypeCB))
+        return dish.dishTypes.find(isKnownTypeCB)
+    else
+        return "";
     // TODO
 }
-
 /* 
    Write a sort() comparator callback that compares dishes by their type, 
    so that all starters come before main courses and main courses come before desserts 
 */
-function __give_a_proper_name_CB(dishA, dishB){
+function compareDishesCB(dishA, dishB){
+    return dishTypeRanking[dishType(dishA)] - dishTypeRanking[dishType(dishB)];
     // use dishType(dishA) and dishType(dishB)
     // use dishTypeRanking to convert these types to integers
     // once you know the integers, simply compare them
@@ -54,7 +69,7 @@ function __give_a_proper_name_CB(dishA, dishB){
    Sort the dishes using the comparator callback above.
 */
 function sortDishes(dishes){
-    return //TODO
+    return [...dishes].sort(compareDishesCB);//TODO
 }
 
 /* 
@@ -93,9 +108,9 @@ function shoppingList(dishes){
         }
     }
 
-    const arrayOfIngredientArrays= dishes.map(/*TODO pass the callback that transforms a dish to its ingredients */);
+    const arrayOfIngredientArrays= dishes.map(keepJustIngredientsCB/*TODO pass the callback that transforms a dish to its ingredients */);
     const allIngredients= arrayOfIngredientArrays.flat();    
-    allIngredients.forEach(/* TODO: pass the callback that treats an ingredient */);
+    allIngredients.forEach(ingredientCB/* TODO: pass the callback that treats an ingredient */);
 
     // Note: the 3 lines above can be written as a function chain:
     // dishes.map(callback1).flat().forEach(callback2);
@@ -107,10 +122,16 @@ function shoppingList(dishes){
 
 /* Given a dish array, calculate their total price with a map-reduce callback exercise */
 function menuPrice(dishesArray){
+    function dishPriceCB(dish){
+        return dish.pricePerServing;
+    }
     // TODO callback1: given a dish, return its price. Look in /test/dishesConst.js to find out the name of the dish price property. 
+    function dishSumCB(priceA, priceB){
+        return priceA + priceB;
+    }
     // TODO callback2, with two parameters. Return the sum of the parameters
     // TODO set proper names to the callbacks!
-    
+    return dishesArray.map(dishPriceCB).reduce(dishSumCB, 0);
     // TODO 1) call dishesArray.map() with callback1 as argument. This will return an array of prices.
     // TODO 2) on the array of prices, call reduce() with callback2 as first parameter, and 0 as second parameter (we compute the total starting from zero).
     //        This will produce the total price, which you return
@@ -122,7 +143,7 @@ function menuPrice(dishesArray){
 */
 
 
-//export {compareIngredientsCB, sortIngredients /*TODO add more here! */};
+export {compareIngredientsCB, sortIngredients, isKnownTypeCB, dishType, compareDishesCB, sortDishes, shoppingList, menuPrice};
 
 /*
   Optional: once you are done with the whole TW1, 
