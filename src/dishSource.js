@@ -16,6 +16,7 @@ function getDishDetails(id){
 
 function resultProcessACB(data){
     return data[0];
+<<<<<<< HEAD
 }
 function searchDishes(object){
     return fetch(BASE_URL + "recipes/complexSearch?" + 
@@ -36,6 +37,21 @@ function searchConditions(object){
 
 
 
+=======
+}
+
+function searchDishes(object){
+    return fetch(BASE_URL + "recipes/complexSearch?" + 
+    searchConditions(object), 
+    {method: 'GET', headers:{'X-Mashape-Key': API_KEY}}).then(responseHandlerACB).then(dataHandlerACB);
+}
+
+function searchConditions(object){
+    if(object.query && object.type) return new URLSearchParams({query:object.query, type:object.type});
+    else if (!object.query && object.type) return new URLSearchParams({type:object.type});
+    else if (object.query && !object.type) return new URLSearchParams({query:object.query});
+    else return new URLSearchParams({});
+>>>>>>> fbf4288d2b3593357fb2ffdc02333107e68874ef
 }
 
 
