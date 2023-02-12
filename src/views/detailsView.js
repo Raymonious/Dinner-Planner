@@ -1,7 +1,7 @@
 function DetailsView(aa){
     return(
         <div>
-            <h1>aa.dishData.title </h1>
+            <h1>{aa.dishData.title} </h1>
             <div>
             <table border = {5} width = {'400'}><tbody><tr>
                 <td><img src = {aa.dishData.image} height = {'100'} width = {'100'}></img></td>
@@ -30,7 +30,7 @@ function DetailsView(aa){
         </div>
     );
     function menuAddACB(){
-        aa.addToMenu(true);
+        aa.addToMenu();
     }
 
     function getIngredientCB(ingre){
