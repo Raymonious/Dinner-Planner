@@ -7,6 +7,7 @@ const PREFIX=window.location.toString().includes("react")?"reactjs":"vuejs";
 
 const Summary=require("../"+PREFIX+"/summaryPresenter.js").default;
 const Sidebar=require("../"+PREFIX+"/sidebarPresenter.js").default;
+const Search=require("../"+PREFIX+"/searchPresenter.js").default;
 
 export default
 function App(props){
@@ -14,6 +15,7 @@ function App(props){
                 <div class="flexParent">
                 <div><Sidebar class="sidebar" model={props.model} /></div>
                 <div><Summary class="mainContent" model={props.model} /></div>
+                <div><Search class="mainContent" model={props.model} /></div>
                 </div>
             </div>
            );

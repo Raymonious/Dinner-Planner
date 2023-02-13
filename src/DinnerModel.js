@@ -73,8 +73,6 @@ class DinnerModel{
         resolvePromise(searchDishes(searchParams), this.searchResultsPromiseState);
     }
 
-
-
 }
 
 export default DinnerModel;
