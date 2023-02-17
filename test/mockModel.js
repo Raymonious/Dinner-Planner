@@ -29,7 +29,7 @@ export default function (context="") {
                 return model[prop];
             if(prop.startsWith("__v"))
                 return model[prop];
-            if(model[prop])
+            if(model[prop]!==undefined)
                 return model[prop];
             console.error("Warning: unexpected access to Model "+prop+". A default value will be returned "+(context&&"(in: "+context+")"));
             return mock[prop];
