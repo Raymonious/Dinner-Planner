@@ -11,8 +11,6 @@ import "firebase/database";
 // needed for plugging in a "mock" firebase for testing. In the project simply import firebase where needed, as above
 window.firebase=firebase;
 
-// TODO import navigation
-
 // using require() instead of import, for the above assignments to take effect before ReactRoot is loaded
 const Reactoot=require("/src/reactjs/ReactRoot.js").default;
 

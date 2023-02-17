@@ -10,8 +10,6 @@ import "firebase/database";
 // needed for plugging in a "mock" firebase for testing. In the project simply import firebase where needed, as above
 window.firebase=firebase;
 
-// TODO import navigation
-
 // using require() instead of import, for the above assignments to take effect before VueRoot is loaded
 const VueRoot=require("/src/vuejs/VueRoot.js").default;
 
