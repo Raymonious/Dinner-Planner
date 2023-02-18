@@ -22,6 +22,9 @@ const preamble= <div>
                     <li>call notifyObservers from setNumberOfGuests, addToMenu, removeFromMenu, setCurrentDish!</li>
                     <li>interact with the app to change the model and see both observers in action</li>
                     <li><pre>myModel.setNumberOfGuests(5)</pre></li>
+                    <li>add your own observer:</li>
+                    <li><pre>fucnction observerACB(){"{console.log(\"my observer!\", myModel.YOUR_INTEREST_HERE);}"}</pre></li>
+                    <li><pre>myMode.addObserver(observerACB)</pre></li>
                   </ul>
                   <hr/>
                 </div>;
