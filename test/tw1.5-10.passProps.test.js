@@ -12,11 +12,25 @@ let Sidebar;
 let utilities;
 const X= TEST_PREFIX;
 try{
-    utilities = require("/src/"+TEST_PREFIX+"utilities.js");
-    SidebarView= require('../src/views/'+X+'sidebarView.js').default;
-    SummaryView= require('../src/views/'+X+'summaryView.js').default;
+    utilities = require("/src/"+X+"utilities.js");
     Sidebar= require('../src/vuejs/'+X+'sidebarPresenter.js').default;
 }catch(e){};
+
+try{
+    SummaryView= require('../src/views/'+X+'summaryView.vue').default;
+}catch(e){
+    try{
+        SummaryView= require('../src/views/'+X+'summaryView.js').default;
+    }catch(e){}
+}
+
+try{
+    SidebarView= require('../src/views/'+X+'sidebarView.vue').default;
+}catch(e){
+    try{
+        SidebarView= require('../src/views/'+X+'sidebarView.js').default;
+    }catch(e){}
+}
 
 const {render, h}= require("vue");
 
@@ -30,24 +44,21 @@ describe("TW1.5 Pass props from Presenter to View", function tw1_5_10() {
 
     it("Vue Summary presenter renders SummaryView with people prop [test UI](/tw1.5.html)", function tw_1_5_10_1(){
         let Summary;
-        let SummaryView;
+        let SummaryView1;
         try{
-        Summary= require('../src/vuejs/'+TEST_PREFIX+'summaryPresenter.js').default;
-        SummaryView= require('../src/views/'+TEST_PREFIX+'summaryView.js').default;
+            Summary= require('../src/vuejs/'+TEST_PREFIX+'summaryPresenter.js').default;
         }catch(e){console.log(e);};
 
         installOwnCreateElement();
         let rendering=Summary({model: new Proxy({numberOfGuests:2, dishes:[]}, makeModelProxyHandler("Summary presenter"))   });
 
-        expect(rendering.tag).to.be.ok;
-        expect(rendering.tag.name).to.equal(SummaryView.name);
-        expect(rendering.props).to.be.ok;
+        expect(rendering.tag, "Summary presenter expected to render SummaryView").to.equal(SummaryView);
+        expect(rendering.props, "Summary presenter expected to pass props").to.be.ok;
         expect(rendering.props.people, "people prop passed to SummaryView should be the Model number of guests").to.equal(2);
 
         rendering=Summary({model: new Proxy({numberOfGuests:3, dishes:[]}  , makeModelProxyHandler("Summary presenter"))     });
-        expect(rendering.tag).to.be.ok;
-        expect(rendering.tag.name).to.equal(SummaryView.name);
-        expect(rendering.props).to.be.ok;
+        expect(rendering.tag, "Summary presenter expected to render SummaryView").to.equal(SummaryView);
+        expect(rendering.props, "Summary presenter expected to pass props").to.be.ok;
         expect(rendering.props.people, "people prop passed to SummaryView should be the Model number of guests").to.equal(3);
     });
 
@@ -75,8 +86,7 @@ describe("TW1.5 Pass props from Presenter to View", function tw1_5_10() {
         installOwnCreateElement();
         let rendering=Sidebar({model:  new Proxy({numberOfGuests:2, dishes:[]} , makeModelProxyHandler("Sidebar presenter"))   });
 
-        expect(rendering.tag).to.be.ok;
-        expect(rendering.tag.name).to.equal(SidebarView.name);
+        expect(rendering.tag, "Sidebar presenter expected to render SidebarView").to.equal(SidebarView);
         expect(rendering.props).to.be.ok;
         expect(rendering.props.number, "number prop passed to SidebarView should the Model number of guests").to.equal(2);
 

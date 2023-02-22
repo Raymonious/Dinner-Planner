@@ -15,7 +15,7 @@ try{
 }
 if(Search){
     const model= new DinnerModel();
-    const preamble=<div><p> This is the TW3.2 React Search presenter test.</p>
+    const preamble=<div><p> This is the TW3.2 React Search presenter test (resolving promises in Applicatin State, Lifecycle).</p>
                      <p>It displays the Search interface, and you should be able to perform searches</p>
                      <p>You should also see some initial search results (use component lifecycle).</p>
                      <hr/></div>;        

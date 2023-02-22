@@ -31,12 +31,6 @@ describe("TW3.2 React Search presenter [test](/tw3.2.1-react.html)", function tw
 
     before(async function tw3_2_20_before() {
         if (!SearchPresenter){
-            /*let reactPresenter;
-            try{
-            reactPresenter= require("../src/reactjs/" + X + "searchPresenter.js");
-            }catch(e){}
-            if(!reactPresenter)
-            expect.fail("Either a React presenter or a Vue object presenter should be defined"); */
             this.skip();
         }
         installErrorFetch();

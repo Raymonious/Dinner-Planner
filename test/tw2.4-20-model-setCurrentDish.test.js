@@ -3,6 +3,16 @@ import {withMyFetch, myDetailsFetch} from "./mockFetch.js";
 
 const X = TEST_PREFIX;
 
+let VueDetailsPresenter;
+try {
+    VueDetailsPresenter = require("../src/vuejs/" + X + "detailsPresenter.js").default;
+} catch (e) { }
+
+let ReactDetailsPresenter;
+try {
+    ReactDetailsPresenter = require("../src/reactjs/" + X + "detailsPresenter.js").default;
+} catch (e) { }
+
 describe("TW2.4 Promise state in Model: current dish [test](/tw2.4.html)", function tw_2_4_20() {
   this.timeout(200000);
 
@@ -13,7 +23,10 @@ describe("TW2.4 Promise state in Model: current dish [test](/tw2.4.html)", funct
             model = new DinnerModel();
         }catch(e) { console.error(e); }
         if(model && !model.currentDishPromiseState) this.skip();
-        
+        if(VueDetailsPresenter && typeof VueDetailsPresenter !== "function")
+            this.skip();
+        if(ReactDetailsPresenter)
+            this.skip();        
     });
   this.beforeEach(function tw_2_4_20_beforeEach() {
       const DinnerModel = require("../src/" + X + "DinnerModel.js").default;
@@ -33,7 +46,8 @@ describe("TW2.4 Promise state in Model: current dish [test](/tw2.4.html)", funct
     );
   });
 
-  it("setCurrentDish sets currentDishPromiseState if it gets a valid dish id", async function tw_2_4_20_2() {
+    it("setCurrentDish sets currentDishPromiseState if it gets a valid dish id", async function tw_2_4_20_2() {
+
     expect(model).to.have.property("currentDishPromiseState");
     let dishId = 601651;
     withMyFetch(myDetailsFetch, ()=>model.setCurrentDish(dishId));

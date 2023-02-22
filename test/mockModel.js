@@ -1,5 +1,5 @@
 function dummyMethod(){
-    throw new Error("unexpected Model method invocation. We are using a dummy Model to test your Presenter. The dummy ≈ßmodel only defines the methods relevant for the respective Presenter.");
+    throw new Error("unexpected Model method invocation. We are using a dummy Model to test your Presenter. The dummy model only defines the methods relevant for the respective Presenter.");
 }
 const mock= {
     numberOfGuests:2,
