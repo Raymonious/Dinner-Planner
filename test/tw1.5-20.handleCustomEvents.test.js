@@ -8,20 +8,13 @@ import makeModelProxyHandler from "./mockModel.js";
 
 let SidebarView;
 let Sidebar;
+let utilities;
 const X= TEST_PREFIX;
 
 try{
     utilities = require("/src/"+X+"utilities.js");
     Sidebar= require('../src/vuejs/'+X+'sidebarPresenter.js').default;
 }catch(e){};
-
-try{
-    SummaryView= require('../src/views/'+X+'summaryView.vue').default;
-}catch(e){
-    try{
-        SummaryView= require('../src/views/'+X+'summaryView.js').default;
-    }catch(e){}
-}
 
 try{
     SidebarView= require('../src/views/'+X+'sidebarView.vue').default;
