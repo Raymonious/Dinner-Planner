@@ -2,6 +2,7 @@ const fs=  require("fs");
 const path = require('path');
 const webpack= require("webpack");
 const parseGitConfig = require('parse-git-config');
+const VueLoaderPlugin = require('vue-loader/dist/plugin.js').default;
 
 const prefix=  fs.existsSync("./src/solved-utilities.js")?"solved-":"";
 
@@ -21,7 +22,7 @@ try {
 
 let currentDirectory;
 try {
-    gitConfig = parseGitConfig.sync()
+    gitConfig = parseGitConfig.sync();
     currentDirectory = gitConfig['remote "origin"'].url.split('/').slice(-1)[0].replace(".git", "");
 } catch(e) {
     try {
@@ -68,7 +69,7 @@ const bootstrap= ["vuejs", "reactjs"]
       .filter(function keepOnlyExistingCB(f){ return fs.existsSync(Object.values(f)[0]);})   // include only if file (path) exists
       .reduce(function mergeObjectsCB(acc, f){ return {...acc, ...f};}, {});                 // merge objects into one  {framework1JS:path1, f2: path2}
 
-function makeBootrapHtmlCB(framework){     // framework bootstrap is at framework/index.html
+function makeBootstrapHtmlCB(framework){     // framework bootstrap is at framework/index.html
     return new HtmlWebpackPlugin({
         filename: framework.slice(0, -2)+"/index.html",
         template: './src/'+prefix+'index.html',
@@ -91,7 +92,7 @@ module.exports = {
     },
     plugins: [
         ...tws.map(makeHtmlCB),    // a HTML for each TW entry, map() produces an array, which we spread ...
-        ...Object.keys(bootstrap).map(makeBootrapHtmlCB),   // a HTML for each existing bootstrap index.js
+        ...Object.keys(bootstrap).map(makeBootstrapHtmlCB),   // a HTML for each existing bootstrap index.js
         
         new HtmlWebpackPlugin({    // the test.html for tests, see the test entry above
             filename: "test.html",
@@ -113,6 +114,7 @@ module.exports = {
             TEST_PREFIX:"\'"+prefix+"\'",
 //            TEST_PREFIX: "\'\'"
         }),
+        new VueLoaderPlugin(),
     ],
     module: {
         rules: [
@@ -142,10 +144,20 @@ module.exports = {
                     }
                 }
             },
+            {      
+                test: /\.?vue$/,
+                use:{
+                    loader: 'vue-loader'
+                }
+            }
         ]
     },
     devtool: false,  // needed for the SourceMapDevToolPlugin
     mode:'development',
+    devServer: {
+        historyApiFallback: true,
+  }
 };
+
 
 

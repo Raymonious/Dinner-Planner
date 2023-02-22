@@ -18,7 +18,9 @@ describe("TW2.5 Presenter passing props and custom events: DetailsPresenter [tes
   this.timeout(200000);
 
   before(function tw2_5_10_before(){
-    if(!DetailsPresenter) this.skip();
+      if(!DetailsPresenter) this.skip();
+      if (typeof DetailsPresenter == "object") this.skip();
+
   });
 
   it("Vue DetailsPresenter uses promiseNoData to determine whether to render DetailsView or not", async function tw2_5_10_1(){

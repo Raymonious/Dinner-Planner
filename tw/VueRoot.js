@@ -1,19 +1,10 @@
 import DinnerModel from "/src/DinnerModel.js";
 import App from "/src/views/app.js";
-import {reactive, onMounted} from "vue";
 
-let proxyModel;
+import {reactive} from "vue";
 
-const VueRoot={
-    setup(){
-        const rootModel= reactive(new DinnerModel());
-        proxyModel= rootModel;
-        
-        return function renderACB(){
-            return <App model={rootModel} />;
-        };
-    }
-}
-export default VueRoot;
+const proxyModel= reactive(new DinnerModel()); // can use reactive outside any function!
 
-export {proxyModel};
+export default function VueRoot(){ return <App model={proxyModel} />;}
+
+export {proxyModel};  // to make the model accessible for testing

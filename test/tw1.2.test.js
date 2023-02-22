@@ -8,14 +8,23 @@ const {render, h}= require("vue");
 
 let SummaryView;
 let SidebarView;
-try {
-SummaryView= require('../src/views/'+TEST_PREFIX+'summaryView.js').default;
+
+const X= TEST_PREFIX;
+try{
+    SummaryView= require('../src/views/'+X+'summaryView.vue').default;
+}catch(e){
+    try{
+        SummaryView= require('../src/views/'+X+'summaryView.js').default;
+    }catch(e){}
 }
-catch (e) {console.log(e);}
 
 try{
-   SidebarView= require('../src/views/'+TEST_PREFIX+'sidebarView.js').default;
-}catch(e){ console.log(e);};
+   SidebarView= require('../src/views/'+X+'sidebarView.vue').default;
+}catch(e){
+    try{
+        SidebarView= require('../src/views/'+X+'sidebarView.js').default;
+    }catch(e){}
+}
 
 describe("TW1.2 Basic Rendering", function tw1_2() {
     this.timeout(200000);  // increase to allow debugging during the test run
@@ -29,7 +38,7 @@ describe("TW1.2 Basic Rendering", function tw1_2() {
     });
 
     it("SummaryView does not change its props during rendering", function tw1_2_2(){
-        installOwnCreateElement();
+        if(typeof SummaryView !="function") this.skip();
         const props = {people: 4, ingredients: []};
         const json = JSON.stringify(props);
         const rendering= SummaryView(props);
@@ -61,8 +70,8 @@ describe("TW1.2 Basic Rendering", function tw1_2() {
         
     });
 
-    it("SidebarView does not change its props during rendering", function tw1_2_5(){
-        if(!SidebarView) this.skip();
+   it("SidebarView does not change its props during rendering", function tw1_2_5(){
+        if(!SidebarView || typeof SidebarView !="function") this.skip();
         installOwnCreateElement();
         const props = {number: 4, dishes: []};
         const json = JSON.stringify(props);

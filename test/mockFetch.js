@@ -12,7 +12,7 @@ function mySearchFetch(fetchURL, fetchParam, url2Results=url2ExampleResults){
         ok:true,
         status:200,
         json(){
-            return mySearchFetch.lastPromise=new Promise(resolve => setTimeout(resolve), delay).then(()=> ret);
+            return mySearchFetch.lastPromise=new Promise(resolve => setTimeout(resolve, delay)).then(()=> ret);
         }
     });
 }
@@ -93,7 +93,22 @@ function checkFetchUrl(url, param, [hashCode1, hashCode2], queryHash=[]){
         expect.fail("expected "+queryHash.length+" query string parameters, found none");
 }
 
-export {withMyFetch, checkFetchUrl, myDetailsFetch, mySearchFetch, findCGIParam, searchResults, dishInformation};
+function installErrorFetch(){
+    const oldFetch= window.fetch;
+    window.fetch= function(url, param){
+        throw new Error("tests install their own fetch when they need to simulate a network access.\n"+
+                        "You made a fetch that is not expected by the tests. \n"+
+                        "This usually happens when you resolve a fetch at every render, which changes state, which triggers another render.\n"+
+                        "This infinite re-render will lead to infinite numbers of fetches, which may be very expensive!\n"+
+                        "Close all interactive browser test tabs immediately, and examine your code! Request TA help!\n"+
+                        "Look at the stacktraces in your Console, you should be able to find the line in your code that triggered the faulty fetch()\n"+
+                        "It can be a React.useEffect() with no [] parameter (which will run at every render so it will do the fetch at every render!)\n"+
+                        " or some other fetch or state change performed during render");
+    };
+    return oldFetch;
+}
+
+export {installErrorFetch, withMyFetch, checkFetchUrl, myDetailsFetch, mySearchFetch, findCGIParam, searchResults, dishInformation};
 
 
 const searchResults = [

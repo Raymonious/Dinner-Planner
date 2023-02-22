@@ -1,5 +1,5 @@
 function dummyMethod(){
-    throw new Error("unexpected Model method invocation. We are using a dummy Model to test your Presenter. The dummy ≈ßmodel only defines the methods relevant for the respective Presenter.");
+    throw new Error("unexpected Model method invocation. We are using a dummy Model to test your Presenter. The dummy model only defines the methods relevant for the respective Presenter.");
 }
 const mock= {
     numberOfGuests:2,
@@ -29,7 +29,7 @@ export default function (context="") {
                 return model[prop];
             if(prop.startsWith("__v"))
                 return model[prop];
-            if(model[prop])
+            if(model[prop]!==undefined)
                 return model[prop];
             console.error("Warning: unexpected access to Model "+prop+". A default value will be returned "+(context&&"(in: "+context+")"));
             return mock[prop];

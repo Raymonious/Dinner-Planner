@@ -26,20 +26,27 @@ describe("TW2.2 API call: [getMenuDetails](/tw2.2.0.html)  [getDishDetails](/tw2
         }).timeout(4000);
     }
 
-    function testMenuPromise(text, p, expectedIdsAndHash, expectedQueryString) {
+    function testMenuPromise(text, p, expectedIdsAndHash, expectedQueryString, expectedQueryStringCommasEncoded) {
         it(text, async function tw2_2_10_testDishPromise(){
             if (!getMenuDetails ) this.skip();
             const dishes= await withMyFetch(myDetailsFetch, p);
             expect(dishes, "getMenuDetails expected to return a Promise that resolves to an array of dishes").to.be.an('array');
             expect(dishes.map(d=>d.id),"getMenuDetails array expected to contain dishes with the given ids").to.deep.equal(expectedIdsAndHash.ids);
-            checkFetchUrl(myDetailsFetch.lastFetch, myDetailsFetch.lastParam, [expectedIdsAndHash.hash], expectedQueryString);
+            try{
+                checkFetchUrl(myDetailsFetch.lastFetch, myDetailsFetch.lastParam, [expectedIdsAndHash.hash], expectedQueryString);
+            }catch(e){
+                if(e.message.indexOf("unexpected query string parameter-value ids=")!=-1)
+                    checkFetchUrl(myDetailsFetch.lastFetch, myDetailsFetch.lastParam, [expectedIdsAndHash.hash], expectedQueryStringCommasEncoded);
+                else
+                    throw e;
+            }
         }).timeout(4000);
     }
     
     testMenuPromise("getMenuDetails test",  function tw2_2_10_testMenuPromise1(){return getMenuDetails([1445969, 601651]);}, {
         ids: [1445969,601651],
         hash:  -1115178555
-    }, [870248148]);
+    }, [870248148], [-3987170]);
 
 
     testDishPromise("getDishDetails promise #1",  function tw2_2_10_testDishPromise1(){return getDishDetails(1445969);}, {

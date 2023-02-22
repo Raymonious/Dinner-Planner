@@ -11,9 +11,28 @@ let utilities;
 const X= TEST_PREFIX;
 try{
     utilities = require("/src/"+TEST_PREFIX+"utilities.js");
-    SummaryView= require('../src/views/'+X+'summaryView.js').default;
-    SidebarView= require('../src/views/'+X+'sidebarView.js').default;
 }catch(e){};
+
+//try{
+//    SummaryView= require('../src/views/'+X+'summaryView.vue').default;
+//}catch(e){
+    try{
+        SummaryView= require('../src/views/'+X+'summaryView.js').default;
+    }catch(e){}
+//}
+
+//try{
+//    SidebarView= require('../src/views/'+X+'sidebarView.vue').default;
+//}catch(e){
+    try{
+        SidebarView= require('../src/views/'+X+'sidebarView.js').default;
+    }catch(e){}
+//}
+
+
+
+
+
 
 const {render, h}= require("vue");
 

@@ -15,11 +15,11 @@ try{
            </div>,  document.getElementById('root'));
 }
 if(Search){
-const preamble=<div><p> This is the TW2.5 Search presenter test</p>
-                 <p>It displays the Search interface, and you should be able to perform searches</p>
-                 <p>When you are done with the presenter, you should also see some initial search results.</p>
-                 <p>You can access and manipulate the model from the Console using myModel. Changing the model should be visible in the user interface.</p>
-                 <hr/></div>;        
+    const preamble=<div><p> This is the TW2.5 Vue Search presenter test. Same test is used in TW3.2 for the Vue object component, with lifecycle.</p>
+                     <p>It displays the Search interface, and you should be able to perform searches</p>
+                     <p>When you are done with the presenter, you should also see some initial search results (in TW3.2 you must use component lifecycle for this).</p>
+                     <p>You can access and manipulate the model from the Console using myModel. Changing the model should be visible in the user interface.</p>
+                     <hr/></div>; 
     const VueRoot={
         data(){
         return {rootModel: new DinnerModel()} ;
