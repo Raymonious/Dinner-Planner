@@ -9,7 +9,7 @@ function urlInResult(url){
     return {results:[url] };
 }
 
-describe("TW3.3 Navigation buttons in views", function tw_3_3_30() {
+describe("TW3.3 Navigation buttons in views [Vue](/vue/index.html) [React](/react/index.html)", function tw_3_3_30() {
     this.timeout(200000);
 
     before(  function() {

@@ -1,71 +1,89 @@
-import {withMyFetch, myDetailsFetch, dishInformation} from "./mockFetch.js";
+import { assert, expect } from "chai";
 
-window.firebase={
-    firebaseData:{},
-    firebaseEvents:{
-        value:{},
-        child_added:{},
-        child_removed:{},
-    },
-    initializeApp(){},
-    database(){
-        return {
-            ref(x){
-                if(!x)
-                    window.firebase.emptyRef= true;
-                else
-                    if(x.slice(-1)=="/")
-                        x=x.slice(0, -1); 
-                return {
-                    set(value){window.firebase.firebaseData[x]= value;},
-                    on(event,f){window.firebase.firebaseEvents[event][x]= f;},
-                    once(event,f){
-                        window.firebase.firebaseRoot=x;
-//                        expect(firebaseDataForOnce, "once is only supposed to be used for the initial promise").to.be.ok;
-                        return Promise.resolve({
-                            key:x,
-                            val(){ return window.firebase.firebaseDataForOnce;}
-                        });
-                    },
-                };
-            }
-        };
-    }
-};
+let firebaseModel;
+const X = TEST_PREFIX;
 
-
-async function findKeys(){
-    window.firebase.firebaseData={};
-    const DinnerModel= require('../src/'+TEST_PREFIX+'DinnerModel.js').default;
-
-    const model= new DinnerModel();
-    require('../src/'+TEST_PREFIX+'firebaseModel.js').updateFirebaseFromModel(model);
-    model.setNumberOfGuests(3);
-    const numberKey= Object.keys(window.firebase.firebaseData)[0];
+function findPersistencePropNames(){
+    try {
+        firebaseModel = require("../src/" + X + "firebaseModel.js");
+    } catch (e) { return null; }
+    const data= firebaseModel.modelToPersistence({numberOfGuests: 42, dishes:[{id:44}, {id:43}], currentDish:45});
+    const dataKeys= Object.keys(data);
+    expect(dataKeys.length, "persisted object should have three properties").to.equal(3);
+    const guests= dataKeys.find(x=> data[x]==42);
+    const current= dataKeys.find(x=> data[x]==45);
+        const dishes= dataKeys.find(x=> Array.isArray(data[x]));
+    expect(guests  && current && dishes, "a property must exist for each of: number of guests, current dish and dishes").to.be.ok;
+    expect(data[dishes], "for each dish only the ID should be incldued in the perissted data").to.include(43);
+    expect(data[dishes], "for each dish only the ID should be incldued in the perissted data").to.include(44);
     
-    window.firebase.firebaseData={};
-    await withMyFetch(myDetailsFetch, function(){ model.setCurrentDish(8);});
-    const currentDishKey= Object.keys(window.firebase.firebaseData)[0];
+    expect(data[dishes], "dish IDs should always be saved in the same order, regardless of the order in the dish arrray").to.eql(firebaseModel.modelToPersistence({numberOfGuests: 42, dishes:[{id:43}, {id:44}], currentDish:45})[dishes]);
+    expect(firebaseModel.modelToPersistence({numberOfGuests: 42, dishes:[{id:16}, {id:10},  {id:25},  {id:35},  {id:12}], currentDish:45})[dishes],
+           "to avoid usesless persistence changes, dish IDs should always be saved in the same order, regardless of the order in the dish arrray").to.
+            eql(firebaseModel.modelToPersistence({numberOfGuests: 42, dishes:[{id:12}, {id:35}, {id:16}, {id:25}, {id:10}], currentDish:45})[dishes]);
     
-    window.firebase.firebaseData={};
-    model.addToMenu(dishInformation);
-    const dishesKey= Object.keys(window.firebase.firebaseData)[0].replace("/1445969", "");
-    const root= longestCommonPrefix([numberKey, dishesKey, currentDishKey]);
-    const num= numberKey.slice(root.length);
-    const dishes= dishesKey.slice(root.length);
-    const currentDish= currentDishKey.slice(root.length);
-    
-    return {numberKey, currentDishKey, dishesKey, num, dishes, currentDish, root};
+    return {numberOfGuests: guests, dishes: dishes, currentDish: current};
 }
 
-function longestCommonPrefix(strs) {
-    if (strs === undefined || strs.length === 0) { return ''; }
-    
-    return strs.reduce((prev, next) => {
-        let i = 0;
-        while (prev[i] && next[i] && prev[i] === next[i]) i++;
-        return prev.slice(0, i);
-    });
+const mockDB={};
+
+function getDatabase(){
+    return mockDB;
+}
+
+const state={
+    refHistory:[],
+    getHistory:[],
+    setHistory:[],
+    onHistory:[],
+    data:null,
+    onACB:null,
 };
 
-export {findKeys};
+
+function initDB(){    // returns false if initialization fails
+    const x= findPersistencePropNames();
+    if(!x) return false;
+    // we make a best effort to initialize some data
+    const {numberOfGuests, dishes, currentDish}= x;
+    if(!(numberOfGuests && dishes && currentDish))
+        return false;
+    state.data={
+        [numberOfGuests]:13,
+        [dishes]:[ 45, 42, 22],
+        [currentDish]: 42
+    };
+    state.initialized= true;
+    return true;
+}
+
+    
+function ref(db, path){
+    state.refHistory.push({db, path});
+    return {db, path};
+}
+
+function get(rf, acb){
+    if(!state.initialized)
+        console.warn("mock firebase get() used without initialization");
+    state.getHistory.push({ref:rf, acb});
+    const ret= {
+        val(){ return state.data; }
+    };
+    if(acb) acb(ret);
+    return Promise.resolve(ret);
+}
+
+function set(rf, val){
+    state.setHistory.push({ref:rf, val});
+    state.data= val;
+}
+
+function onValue(rf, acb){
+    state.onACB= acb;
+    state.onHistory.push({ref:rf, acb});
+    //acb(state.data);
+}
+
+export {getDatabase, ref, get, set, onValue, findPersistencePropNames, initDB, state};
+
