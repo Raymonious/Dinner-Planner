@@ -19,8 +19,12 @@ function persistenceToModel(/* TODO */){
     // TODO return a promise
 }
 
-function firebaseModelPromise() {
-
+function firebaseModelPromise(model) {
+    // TODO return a promise chain that
+    // 1) retrieves data from firebase using firebase get()
+    // 2) saves the data into the model (received as parameter)
+    // 3) adds a model observer that calls firebase set() and modelToPersistence()
+    // 4) optional: calls firebase onValue() for live update
 }
 
 
