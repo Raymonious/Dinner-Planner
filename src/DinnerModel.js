@@ -12,11 +12,33 @@ class DinnerModel{
         this.searchParams = {};
         this.searchResultsPromiseState = {};
         this.currentDishPromiseState = {};
+        this.observers = [];
         
     }
+
+    addObserver(callback){
+        this.observers = [...this.observers, callback];
+    }
+
+    removeObserver(callback){
+        function observerCB(element){
+            return element !== callback;
+        }
+        this.observers = this.observers.filter(observerCB);
+    }
+
+    notifyObservers(payload){
+        function invokeObserverCB(ACB){ 
+            try{ACB(payload);}catch(err){console.error(err);}
+        }
+        this.observers.forEach(invokeObserverCB);
+    }
+    
+
     setNumberOfGuests(nr){
         // if() and throw exercise
         // TODO throw an Error /* new Error(someMessage) */ if the argument is smaller than 1 or not an integer
+        if(nr === this.numberOfGuests) return;
         if(nr < 1 || !Number.isInteger(nr))
             throw new Error("number of guests not a positive integer");
 
@@ -29,15 +51,28 @@ class DinnerModel{
             this.numberOfGuests = nr;
         // When this is done, the Unit test "TW1.1 DinnerModel/can set the number of guests" should pass
         // also "number of guests is a positive integer"
+
+        this.notifyObservers();
     }
     addToMenu(dishToAdd){
         // array spread syntax example. Make sure you understand the code below.
         // It sets this.dishes to a new array [   ] where we spread (...) the previous value
+        function isDishInMenuCB(dish){
+            return dishToAdd.id === dish.id;
+        }
+        if (this.dishes.find(isDishInMenuCB)) return;
         this.dishes= [...this.dishes, dishToAdd];
+        this.notifyObservers();
     }
     
     removeFromMenu(dishToRemove){
         // callback exercise! Also return keyword exercise
+
+        function isDishInMenuCB(dish){
+            return dishToRemove.id === dish.id;
+        }
+        if (!this.dishes.find(isDishInMenuCB)) return;
+        
         function hasSameIdCB(dish){
             return dish.id !== dishToRemove.id
             // TODO return true if the id property of dish is _different_ from the dishToRemove's id property
@@ -46,6 +81,7 @@ class DinnerModel{
         }
         this.dishes= this.dishes.filter(hasSameIdCB);
         // the test "can remove dishes" should pass
+        this.notifyObservers();
     }
     /* 
        ID of dish currently checked by the user.
@@ -57,6 +93,7 @@ class DinnerModel{
         if(!id || this.currentDish === id ) return;
         this.currentDish = id;
         resolvePromise(getDishDetails(this.currentDish), this.currentDishPromiseState);
+        this.notifyObservers();
     }
 
     setSearchQuery(searchTxt){
