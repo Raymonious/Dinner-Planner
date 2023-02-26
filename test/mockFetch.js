@@ -22,6 +22,8 @@ function url2MockDishes(url){
     if(q==-1)
         throw new Error("could not find a query string in " +url);
     const search= new URLSearchParams(url.slice(q));
+    if(search.get("ids")=="")
+        return [];
     if(!search.get("ids"))
         throw new Error("expected ids parameter");
     return search.get("ids").split(",").map(x=>({id:+x}));

@@ -1,6 +1,7 @@
 // Add relevant imports here 
 
-// Define the ReactRoot component
-// function ReactRoot()
+// const myModel= new DinnerModel();
 
-// Export the ReactRoot component
+// define the routes
+
+// export default function ReactRoot() { TODO }

@@ -1,6 +1,8 @@
-// Add relevant imports here 
+// Add relevant imports
 
-// Define the VueRoot component
+// const myModel= reactive(new DinnerModel());
+// const router= TODO
+
 // const VueRoot = {TODO}
 
-// Export the VueRoot component
+// export  {VueRoot, router}

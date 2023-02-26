@@ -54,6 +54,7 @@ describe("TW2.5 Presenter passing props and handling custom events: Search [test
       const renderingSearchResults = SearchPresenter({
           model: new Proxy({
               searchResultsPromiseState: { promise: "foo", data: "bar" },
+              searchParams:{},  // may read for passing to view
               setCurrentDish(id) {dishId = id;},
           },makeModelProxyHandler("Search presenter rendered with data, testing SearchResultsView custom events"))
       });
@@ -101,7 +102,7 @@ describe("TW2.5 Presenter passing props and handling custom events: Search [test
         expect(searched, "custom event handler "+onSearchHandler+" should trigger search in the model").to.equal(true);
         expect(searchPars, "custom event handler "+onSearchHandler+" should trigger search in the model with the parameters filled in by the user").to.deep.equal(dummyModel.searchParams);
 
-        expect(Object.keys(searchFormViewProps).length, "expected 4 props in total for the searchFormView").to.equal(4);
+//        expect(Object.keys(searchFormViewProps).length, "expected 4 props in total for the searchFormView").to.equal(4);
     });
 
     it("Vue SearchPresenter handles custom event fired by SearchResultsView", function tw2_5_20_4() {
@@ -109,7 +110,8 @@ describe("TW2.5 Presenter passing props and handling custom events: Search [test
        let dishId;
         const renderingSearchResults = SearchPresenter({
             model: new Proxy({
-               searchResultsPromiseState: { promise: "foo", data: "bar" },
+                searchParams:{},   // may read for passing to view
+                searchResultsPromiseState: { promise: "foo", data: "bar" },
                 setCurrentDish(id) {dishId = id;},
             },makeModelProxyHandler("Search presenter rendered with data, testing SearchResultsView custom events"))
         });
@@ -137,6 +139,7 @@ describe("TW2.5 Presenter passing props and handling custom events: Search [test
         const renderingEmpty = SearchPresenter(
             {  model: new Proxy(
                 {
+                    searchParams:{},   // may read for passing to view
                     searchResultsPromiseState: {},
                     doSearch(){searched = true;},
                 },

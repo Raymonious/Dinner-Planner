@@ -1,70 +1,133 @@
+
 import { assert, expect } from "chai";
-import {findKeys} from "./mockFirebase.js";
-import {withMyFetch, myDetailsFetch, dishInformation} from "./mockFetch.js";
+import {withMyFetch, myDetailsFetch} from "./mockFetch.js";
 import {dummyImgName} from "./searchUtils.js";
+import {useState, useEffect, createElement} from "react";
+import {h, createApp} from "vue";
 
-async function checkImageAndProps(doRender, propsHistory){
-    const {numberKey, dishesKey, currentDishKey, num, dishes, currentDish}= await findKeys();
-    window.firebase.firebaseDataForOnce={
-        [num]:5,
-        [dishes]:{
-            "11":"bla",
-            "16":"blabla",
-            "13":"some dish"
-        },
-        [currentDish]:42,
-    };
-    const oldFetch= fetch;
-    window.fetch= myDetailsFetch;
+const X = TEST_PREFIX;
+
+function makeCreateElement(framework, h){
+    const propsHistory=[];
     
-    try{
-        doRender();
-        await new Promise(resolve => setTimeout(resolve));
+    function Dummy(props){
+        propsHistory.push({... props});
+        return <span>dummy {props.type}</span>;
     }
-    finally{ window.fetch=oldFetch; }
-
-    expect(propsHistory.length, "Root should initially render an image").to.gte(1);
-    expect(propsHistory[0], "Root should initially render an image").to.equal(dummyImgName);
-    expect(propsHistory[1], "Root should pass a model prop to App").to.have.property("model");
-    //expect(propsHistory[1].model, "App model prop should be an object from VueRoot state (proxy)").to.be.a("Proxy");
-    expect(propsHistory[1].model.numberOfGuests, "model passed to App  should have the same number of guests as in firebase").to.equal(5);
-    expect(propsHistory[1].model.dishes.map(d=>d.id).sort(), "model passed to App passed should have the same dish IDs as in firebase").to.eql([11,13,16]);
+    return {replacePresenters:function(tag, props, ...children){
+        if(tag==require("../src/"+framework+"/" + X + "searchPresenter.js").default)
+            return h(Dummy, {...props, type:"search"});
+        if(tag==require("/src/"+framework+"/" + X + "sidebarPresenter.js").default)
+            return h(Dummy, {...props, type:"sidebar"});
+        if(tag==require("/src/"+framework+"/" + X + "detailsPresenter.js").default)
+            return h(Dummy, {...props, type:"details"});
+        if(tag==require("/src/"+framework+"/" + X + "summaryPresenter.js").default)
+            return h(Dummy, {...props, type:"summary"});
+        if(tag=="img") {
+            return h(Dummy, {...props, type:"imgLoader"});
+        }
+        if(tag=="div" && children && children[0] && (""+children[0]).toLowerCase()=="no data")
+            return h(Dummy, {...props, type:"no data"});
+        return h(tag, props, ...children);
+    },
+            propsHistory
+           };
 }
 
-async function checkUpdateFromFirebase(propsHistory){
-    const {numberKey, dishesKey, currentDishKey, num, dishes, currentDish}= await findKeys();
+async function testVue(theTest){
+    require("./mockFirebase.js").initDB();
+    const {replacePresenters, propsHistory} = makeCreateElement("vuejs", h);
 
-    propsHistory.length=0;    
-    const guestEvent= window.firebase.firebaseEvents.value[numberKey];
-    guestEvent({val(){ return 7;}});
+    window.React={createElement:replacePresenters};
+
+    let VueRootAll;
+    try {
+        VueRootAll = require("../src/vuejs/" + X + "VueRoot.js");
+    } catch (e) { }
+
+    if(!VueRootAll?.VueRoot || !VueRootAll?.router)
+        return false;
     
-    await new Promise(resolve => setTimeout(resolve));
+    const div= document.createElement("div");
+    window.location.hash="pursposefully_wrong_route";   // force rendering of just Sidebar
+    const app= createApp(VueRootAll.VueRoot);
 
-    expect(propsHistory.length, "Changing nr of guests in firebase should update the root children").to.gte(1);
-    expect(propsHistory[0].model.numberOfGuests, "Changing nr of guests in firebase should update the root children with the new value").to.equal(7);
+    await withMyFetch(myDetailsFetch, function(){
+        app.use(VueRootAll.router);
+        app.mount(div);
+    });
+    await theTest(propsHistory);
+    app.unmount();
+    return true;
+}
 
-    propsHistory.length=0;    
-    const addedEvent=  window.firebase.firebaseEvents.child_added[dishesKey];
-    await withMyFetch(myDetailsFetch, function(){addedEvent({key:"3214", val(){ return "blabla";}});});
+async function testReact(theTest){
+    require("./mockFirebase.js").initDB();
+    const {replacePresenters, propsHistory} = makeCreateElement("reactjs", createElement);
 
-    expect(propsHistory.length, "Adding a dish in firebase should update the root children").to.gte(1);
-    expect(propsHistory[0].model.dishes.map(d=>d.id).sort(), "Adding a dish in firebase should update the root children with the new dish array").to.eql([11, 13, 16, 3214]);
-
-    propsHistory.length=0;    
-    const removedEvent= window.firebase.firebaseEvents.child_removed[dishesKey];
-    removedEvent({key:"11", val(){ return "blabla";}});
+    window.React={createElement:replacePresenters};
     
-    await new Promise(resolve => setTimeout(resolve));
-    expect(propsHistory.length, "Removing a dish in firebase should update the root children").to.gte(1);
-    expect(propsHistory[0].model.dishes.map(d=>d.id).sort(), "Removing a dish in firebase should update the root children with the new dish array").to.eql([13, 16, 3214]);
+    let ReactRoot;
+    try {
+        ReactRoot = require("../src/reactjs/" + X + "ReactRoot.js").default;
+    } catch (e) { return false;} 
+
+
+    let turnOff;
+
+    function Guard(){
+        const[guard, setGuard]= useState(true);
+        turnOff= function(){setGuard(false); };
+        return guard && <ReactRoot/>;
+    }
+    const div= document.createElement("div");
+    await withMyFetch(myDetailsFetch, function(){
+        window.React={createElement:replacePresenters};
+        window.location.hash="pursposefully_wrong_route";   // force rendering of just Sidebar
+        require("react-dom").render(<Guard/>, div);
+    });
+
+    await theTest(propsHistory);
+    turnOff();
+    return true;
+}
+
+async function testRoutes(propsHistory){
+    expect(propsHistory.length, "Root should render other components").to.be.ok;
+    // we assume that here we have a wrong route, so Sidebar is rendered
+                
+    expect(propsHistory.slice(-1)[0]?.type).to.equal("sidebar");
+    
+    window.location.hash="/";
+    await new Promise(resolve=>setTimeout(resolve));
+    expect(propsHistory.slice(-1)[0]?.type).to.equal("search");
+    
+    window.location.hash="/details";
+    await new Promise(resolve=>setTimeout(resolve));
+    expect(propsHistory.slice(-1)[0]?.type).to.equal("details");
+    
+    window.location.hash="/summary";
+    await new Promise(resolve=>setTimeout(resolve));
+    expect(propsHistory.slice(-1)[0]?.type).to.equal("summary");
+    
+    window.location.hash="/search";
+    await new Promise(resolve=>setTimeout(resolve));
+    expect(propsHistory.slice(-1)[0]?.type).to.equal("search");
 
 }
 
-async function checkFirebaseUpdate(propsHistory){
-    const {numberKey, dishesKey, currentDishKey, num, dishes, currentDish}= await findKeys();
+
+async function testSuspense(propsHistory){
+    const {state, findPersistencePropNames}=require("./mockFirebase.js");
+    const {numberOfGuests, dishes, currentDish}= findPersistencePropNames();
     
-    propsHistory.slice(-1)[0].model.setNumberOfGuests(13);
-    expect(window.firebase.firebaseData[numberKey], "changing the model passed to App should update firebase").to.equal(13);
+    expect(propsHistory.length, "Root should render other components").to.be.gte(3);
+    expect(propsHistory[0].type, "the root component will briefly render 'no data' before the lifecycle executes").to.equal("no data");
+    expect(propsHistory[1].type, "the root component will render a loading image (suspense) while the persistence promise is resolved").to.equal("imgLoader");
+    expect(propsHistory[2].model?.numberOfGuests, "the model passed to the presenters contains the data from the cloud (nr guests)").to.equal(state.data[numberOfGuests]);
+    expect(propsHistory[2].model?.currentDish, "the model passed to the presenters contains the data from the cloud (current dish)").to.equal(state.data[currentDish]);
+    expect(propsHistory[2].model?.dishes.map(d=>d.id), "the model passed to the presenters contains the data from the cloud (dishes)").to.eql(state.data[dishes]);
 }
 
-export {checkImageAndProps, checkUpdateFromFirebase, checkFirebaseUpdate};
+
+export {testReact, testVue, testRoutes, testSuspense};
