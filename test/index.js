@@ -5,13 +5,24 @@ if (module.hot) {
     false, // Skip recursive processing
     /\.test.js$/ // Pick only files ending with .test.js
   );
-  context.keys().forEach(context);
+    context.keys().forEach(context);
 }
 
 const backendURL = "http://standup.eecs.kth.se:3000/";
 // fetch is overriden somewhere in the tests...
 const normalFetch = window.fetch;
 const normalConsole= window.console;
+
+const lastFetch=[Date.now()];
+window.fetch= function(url, params){
+    lastFetch.push(Date.now());
+    console.log(url, params);
+    if(!url.startsWith("/")){
+        console.warn("Tests should only make fetch accesses to \"/\"");
+        throw new Error("unexpected access to "+url+". Time since previous fetch "+(lastFetch.slice(-1)[0]-lastFetch.slice(-2)[0]));
+    }
+    return normalFetch(url, params);
+}
 
 class TestAnalyzer {
   // mochaTestSuites is the default structure
@@ -22,7 +33,7 @@ class TestAnalyzer {
     // a list of all test suites that have been completed
     this.completedSuites = [];
 
-    mochaTestSuites.forEach((suite) => {
+      mochaTestSuites.forEach((suite) => {
       // if one of the tests has a state, the suite is complete
       let isCompletedSuite = suite.tests.some(
         (test) => test.state && test.state !== "pending"
@@ -104,7 +115,7 @@ class TestAnalyzer {
 const runnerClass = mocha._runnerClass;
 
 class MyRunner extends runnerClass {
-  constructor(suite, opts) {
+    constructor(suite, opts) {
     super(suite, opts);
   }
   runAsync(...params) {

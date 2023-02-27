@@ -2,7 +2,7 @@ import { assert, expect } from "chai";
 import {render, h} from "vue";
 
 import {findDetailsEventName, makeRender, checkModelFetch} from "./detailsUtils.js";
-import {installErrorFetch, withMyFetch, myDetailsFetch} from "./mockFetch.js";
+import {withMyFetch, myDetailsFetch} from "./mockFetch.js";
 
 import {dummyImgName} from "./searchUtils.js";
 
@@ -13,17 +13,14 @@ try {
     DetailsPresenter = require("../src/vuejs/" + X + "detailsPresenter.js").default;
 } catch (e) { }
 
-const oldFetch= window.fetch;
 describe("TW3.2 Vue resolve promise in component state, with side effect (Details presenter) [test](/tw2.5.1.html)", function tw_3_2_70() {
     this.timeout(200000);
     const React={createElement:h};
     
     before(async function tw_3_2_70_before() {        
         if (!DetailsPresenter  || typeof DetailsPresenter == "function") this.skip();
-        installErrorFetch();
     });
     after(function tw_3_2_70_after(){
-        window.fetch=oldFetch;
         React.createElement=h;
     });
 

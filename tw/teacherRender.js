@@ -1,3 +1,5 @@
+import "/src/teacherFetch.js";
+
 let render;
 
 if(window.location.toString().includes("react")){
