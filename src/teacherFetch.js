@@ -21,4 +21,4 @@ window.fetch=function(url, params){
     }
     return normalFetch(url, params);
 };
-console.log("DH2642 fetch() ifinite re-render protection installed");
+console.log("DH2642 fetch() infinite re-render protection installed");
