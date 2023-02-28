@@ -6,13 +6,15 @@ const X = TEST_PREFIX;
 function findPersistencePropNames(){
     try {
         firebaseModel = require("../src/" + X + "firebaseModel.js");
+        if(!firebaseModel.modelToPersistence)
+            return null;
     } catch (e) { return null; }
     const data= firebaseModel.modelToPersistence({numberOfGuests: 42, dishes:[{id:44}, {id:43}], currentDish:45});
     const dataKeys= Object.keys(data);
     expect(dataKeys.length, "persisted object should have three properties").to.equal(3);
     const guests= dataKeys.find(x=> data[x]==42);
     const current= dataKeys.find(x=> data[x]==45);
-        const dishes= dataKeys.find(x=> Array.isArray(data[x]));
+    const dishes= dataKeys.find(x=> Array.isArray(data[x]));
     expect(guests  && current && dishes, "a property must exist for each of: number of guests, current dish and dishes").to.be.ok;
     expect(data[dishes], "for each dish only the ID should be incldued in the perissted data").to.include(43);
     expect(data[dishes], "for each dish only the ID should be incldued in the perissted data").to.include(44);
