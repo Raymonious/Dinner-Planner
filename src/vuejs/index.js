@@ -1,4 +1,5 @@
 // This is the Vue TW3.3 bootstrapping. 
+import "/src/teacherFetch.js";
 import {createApp, h} from "vue";
 
 // needed for View JSX in the lab:

@@ -1,4 +1,5 @@
 // This is the React TW3.3 bootstrapping. 
+import "/src/teacherFetch.js";
 import React from "react";
 import {render} from "react-dom";
 

@@ -1,11 +1,12 @@
 // Add relevant imports
 import {createRouter, createWebHashHistory, RouterView} from "vue-router";
-const PREFIX=window.location.toString().includes("react")?"reactjs":"vuejs";
+import DinnerModel from "../DinnerModel.js";
+import { reactive} from "vue";
+import Details from "./detailsPresenter.js"; 
+import Search from "./searchPresenter.js"; 
+import Sidebar from "./sidebarPresenter.js"; 
+import Summary from "./summaryPresenter.js"; 
 
-const Summary=require("../"+PREFIX+"/summaryPresenter.js").default;
-const Sidebar=require("../"+PREFIX+"/sidebarPresenter.js").default;
-const Search=require("../"+PREFIX+"/searchPresenter.js").default;
-const Details=require("../"+PREFIX+"/detailsPresenter.js").default;
 
 
 const myModel= reactive(new DinnerModel());
