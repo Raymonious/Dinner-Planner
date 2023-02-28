@@ -1,4 +1,4 @@
-import SidebarView from "../views/sidebarView.js";
+import SidebarView from "../views/sidebarView.vue";
 
 export default
 function Sidebar(bazinga){
