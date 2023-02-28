@@ -43,7 +43,7 @@ async function testVue(theTest){
     let VueRootAll;
     try {
         VueRootAll = require("../src/vuejs/" + X + "VueRoot.js");
-    } catch (e) { }
+    } catch (e) {  }
 
     if(!VueRootAll?.VueRoot || !VueRootAll?.router)
         return false;
@@ -72,8 +72,9 @@ async function testReact(theTest){
     let ReactRoot;
     try {
         ReactRoot = require("../src/reactjs/" + X + "ReactRoot.js").default;
-    } catch (e) { return false;} 
-
+    } catch (e) { } 
+    if(!ReactRoot)
+        return false;
 
     let turnOff;
 
