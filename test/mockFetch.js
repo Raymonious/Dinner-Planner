@@ -39,14 +39,36 @@ function myDetailsFetch(fetchURL, fetchParam, url2Dishes=url2MockDishes){
         }
     });
 }
-async function withMyFetch(theFetch, f, url2Result){
+
+const message= `fetch() will stop working now, because the last 10 fetches were made in less than 15 miliseconds.
+The code is still in an infinite re-render/infinite loop, and that will heat up your CPU.
+To stop that, open Developer Tools and Reload ASAP. Then the code will pause. Check the Call Stack!
+Look for useEffect() with no second parameter, or for state changes during render, since that triggers re-render.
+`;
+
+const lastFetch=[{time:Date.now()}];
+async function withMyFetch(theFetch, f, url2Result, maxAllowed=1){
     const oldFetch= fetch;
-    window.fetch= function(url, param){ return theFetch(url.toString(), param, url2Result);};
+    //let fetches=0;
+    window.fetch= function(url, param){
+        lastFetch.push({url, time:Date.now()});
+        //    fetches++;if(fetches>maxAllowed) throwErrorFetch();
+        if(lastFetch.length>10 && lastFetch.slice(-1)[0].time-lastFetch.slice(-10)[0].time<15){
+            const fetches= lastFetch.slice(-10).map(x=>x.url+"\n").join("");
+            console.warn("Execution will now pause because the last 10 fetches were made in less than 15 miliseconds. URLs below. \nCheck the **Call Stack** to see where the offending call comes from!\n "+fetches);
+            debugger;
+            document.body.innerText=message+fetches;
+            throw new Error(message+fetches);
+        }
+        return theFetch(url.toString(), param, url2Result);
+    };
+
     try{
         const result= f();
         await new Promise(resolve => setTimeout(resolve));  // need to wait a bit for the "fetch"
         return result;
     }
+    catch(e){ console.error(e); }
     finally{ window.fetch=oldFetch; }
 }
 
@@ -95,22 +117,7 @@ function checkFetchUrl(url, param, [hashCode1, hashCode2], queryHash=[]){
         expect.fail("expected "+queryHash.length+" query string parameters, found none");
 }
 
-function installErrorFetch(){
-    const oldFetch= window.fetch;
-    window.fetch= function(url, param){
-        throw new Error("tests install their own fetch when they need to simulate a network access.\n"+
-                        "You made a fetch that is not expected by the tests. \n"+
-                        "This usually happens when you resolve a fetch at every render, which changes state, which triggers another render.\n"+
-                        "This infinite re-render will lead to infinite numbers of fetches, which may be very expensive!\n"+
-                        "Close all interactive browser test tabs immediately, and examine your code! Request TA help!\n"+
-                        "Look at the stacktraces in your Console, you should be able to find the line in your code that triggered the faulty fetch()\n"+
-                        "It can be a React.useEffect() with no [] parameter (which will run at every render so it will do the fetch at every render!)\n"+
-                        " or some other fetch or state change performed during render");
-    };
-    return oldFetch;
-}
-
-export {installErrorFetch, withMyFetch, checkFetchUrl, myDetailsFetch, mySearchFetch, findCGIParam, searchResults, dishInformation};
+export { withMyFetch, checkFetchUrl, myDetailsFetch, mySearchFetch, findCGIParam, searchResults, dishInformation};
 
 
 const searchResults = [
