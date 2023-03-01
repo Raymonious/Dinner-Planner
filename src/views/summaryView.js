@@ -24,7 +24,8 @@ function SummaryView(props){
                       // TODO once the table rendering works, sort ingredients before mapping. Import the needed function from utilities.js  
                   }
                 </tbody> 
-                
+                <button onClick={backToSearchACB}>To Search!</button>
+
               </table>
             </div>
     );
@@ -32,6 +33,9 @@ function SummaryView(props){
       Note also that the callback can be defined after it is used! 
       This JS feature is called "function hoisting".
     */
+    function backToSearchACB(){
+      window.location.hash = "#/search"
+    }
     function ingredientTableRowCB(ingr){
         return <tr key={ingr.id} >
                  <td class="center">{ingr.name}</td>

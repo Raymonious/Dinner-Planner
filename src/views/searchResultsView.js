@@ -14,6 +14,7 @@ function SearchResultsView(aa){
         );
         function clickFoodACB(){
             aa.clickToSearch(dish);
+            window.location.hash="#/details"
         }
     }
 }

@@ -32,13 +32,14 @@ function SidebarView(pikachu){
    function dishesTableRowCB(dish){
     return <tr key={dish.id}>
             <td><button onClick = {xPressedACB}>x</button></td>
-             <td class="center"><a href = "#" onClick = {linkDishACB}>{dish.title}</a></td>
+             <td class="center"><a href = "#/details" onClick = {linkDishACB}>{dish.title}</a></td>
              <td class="center">{dishType(dish)}</td>
              <td class="right">{(dish.pricePerServing * pikachu.number).toFixed(2)}</td>
            </tr>;
 
     function linkDishACB(eve){
       pikachu.dishInquired(dish);
+      
     }
 
     function xPressedACB(eve){
@@ -47,4 +48,8 @@ function SidebarView(pikachu){
 }
   
 }
+
+
+
+
 export default SidebarView;

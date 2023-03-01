@@ -1,6 +1,7 @@
 // This is the Vue TW3.3 bootstrapping. 
 import "/src/teacherFetch.js";
 import {createApp, h} from "vue";
+import {render} from "vue"; 
 
 // needed for View JSX in the lab:
 window.React= {createElement:h};

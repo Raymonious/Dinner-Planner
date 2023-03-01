@@ -36,9 +36,9 @@ export default{
             guests = {aa.model.numberOfGuests}
             addToMenu = {addToMenuHandlerACB}
         />;};
+
     },
 };
-
 
 
 
