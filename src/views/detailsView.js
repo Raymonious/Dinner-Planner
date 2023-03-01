@@ -25,12 +25,18 @@ function DetailsView(aa){
             
             <div>
                 <button disabled = {aa.isDishInMenu} onClick = {menuAddACB}>Add to menu!</button>
-                <button>Cancel</button>
+                <button onClick={dishCancleACB}>Cancel</button>
             </div>
         </div>
     );
+    
+    function dishCancleACB(){
+        window.location.hash="#/search"
+    }
+
     function menuAddACB(){
         aa.addToMenu();
+        window.location.hash="#/search"
     }
 
     function getIngredientCB(ingre){

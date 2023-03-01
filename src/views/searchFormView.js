@@ -7,9 +7,16 @@ function SearchFormView(aa){
                 {aa.dishTypeOptions.map(searchOptionsCB)}
             </select>
             <button onClick = {startSearchACB}>Search!</button>
+            <button onClick = {toSummanyACB}>Summary</button>
+
         </div>
 
     );
+
+    function toSummanyACB(){
+        window.location.hash="#/summary"
+    }
+
     function startSearchACB(){
         aa.onSearch();
     }

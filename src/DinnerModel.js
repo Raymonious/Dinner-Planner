@@ -92,7 +92,7 @@ class DinnerModel{
     setCurrentDish(id){
         if(!id || this.currentDish === id ) return;
         this.currentDish = id;
-        resolvePromise(getDishDetails(this.currentDish), this.currentDishPromiseState);
+        //resolvePromise(getDishDetails(this.currentDish), this.currentDishPromiseState);
         this.notifyObservers();
     }
 
