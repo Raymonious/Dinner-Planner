@@ -6,12 +6,13 @@ import Details from "./detailsPresenter.js";
 import Search from "./searchPresenter.js"; 
 import Sidebar from "./sidebarPresenter.js"; 
 import Summary from "./summaryPresenter.js"; 
+import firebaseModel from "../firebaseModel.js";
 
 
 
-const myModel= reactive(new DinnerModel());
+const myModel= reactive(new DinnerModel()); //initialize a component state outside component
 const router= createRouter({
-    history: createWebHashHistory(),
+    history: createWebHashHistory(), //create web history for navigation
     routes:[
         {
             path: "/",
@@ -35,6 +36,7 @@ const router= createRouter({
     ],
 });
 
+/*Create Root component replacing previously used app.js using Composition API*/
 const VueRoot = {
     props: ["myModel"],
     setup(){
@@ -49,6 +51,6 @@ const VueRoot = {
     },
 };
 
-//function VueRoot(){ return <App model={proxyModel} />;}
+
 
 export  {VueRoot, router}
