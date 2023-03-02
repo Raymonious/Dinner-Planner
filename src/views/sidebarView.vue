@@ -32,7 +32,7 @@ function xPressedACB(opt){
                 <tbody>
                 <tr v-for = "opt in sortDishes(props.dishes)"> 
                 <td ><button @click = "xPressedACB(opt)">x</button></td>
-                  <td><a href = "#" @click = "linkDishACB(opt)">{{opt.title}}</a></td>
+                  <td><a href = "#details" @click = "linkDishACB(opt)">{{opt.title}}</a></td>
                   <td>{{dishType(opt)}}</td>
                   <td>{{(opt.pricePerServing * props.number).toFixed(2)}}</td>
                 </tr>
