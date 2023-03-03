@@ -1,15 +1,15 @@
 function SearchResultsView(aa){
     return(
-        <div>
+        <div class = "flexP2 ">
             {aa.searchResults.map(resultSearchCB)}
             
         </div>
     );
     function resultSearchCB(dish){
         return(
-        <span class= "search" onClick={clickFoodACB}>
+        <span class = "search" onClick={clickFoodACB}>
             <img src={dish.image} height={'100'}></img>
-            <div>{dish.title}</div>   
+            <div class= "seartext">{dish.title}</div>   
         </span>
         );
         function clickFoodACB(){

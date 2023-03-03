@@ -25,7 +25,9 @@ function xPressedACB(opt){
 </script>
 <template>
 <div>
+  <div class = "bor">
          <button v-bind:disabled = "isButtonDiabled" class = "button" @click = "minusNumACB" >-</button>{{props.number}}<button class = "button" @click = "plusNumACB">+</button>   
+         </div>
          <table>
                 <th>
                 </th>
@@ -36,14 +38,18 @@ function xPressedACB(opt){
                   <td>{{dishType(opt)}}</td>
                   <td>{{(opt.pricePerServing * props.number).toFixed(2)}}</td>
                 </tr>
-                  <tr>
-                    <td> </td>
-                    <td>Total:</td>
-                    <td> </td>
-                    <td>{{(menuPrice(props.dishes) * props.number).toFixed(2)}}</td> 
+              </tbody>
+          </table>
+          <div class="box1 ab">
+          <table width=100%><tbody>
+          <tr>
+                    <td colspan="3">Total:</td>
+                    <td class="right">{{(menuPrice(props.dishes) * props.number).toFixed(2)}}</td> 
                   </tr>
                 </tbody>
               </table>
+          </div>
+
         </div>
 
 </template>

@@ -5,6 +5,7 @@
 
 .right{
     text-align: right;
+    float: right;
 }
 
 .center{
@@ -13,18 +14,87 @@
 
 .bold{
     font-weight: bold;
+
 }
 
+.title{
+    font-size: x-large;
+    text-shadow: 2px 2px rgb(217, 200, 194);
+    font-weight: bold;
+}
 
+.box1{
+    background-color: whitesmoke;
+    align-items: center;
+    height: auto;
+    padding: 6px;
+}
+.und{
+    border-bottom: #000000 solid;
+}
+.ab{
+    border-top: #000000 solid;
+}
+.box{
+    border: #000000 solid;
+    background-color: whitesmoke;
+    height: auto;
+    margin: 10px;
+}
+.bor{
+    border-bottom: #000000 solid;
+    background-color: whitesmoke;
+    padding: 10px;
+    align-items: center;
+    height: 20px;
+}
+button{
+    background-color: rgb(204, 231, 254);
+    border-style: outset;
+}
 
-@media (min-width: 500px){
+.seartext{
+    width: 135px;
+}
+
+.flexP2{ display:flex;
+    flex-wrap: wrap;
+    height: 100%;
+    margin: 10px;
+    gap: 20px;
+}
+.color{
+    background-color: whitesmoke;
+    border-top: solid #000000;
+    border-left: 0px;
+    border-right: 0px;
+
+}
+
+.search{
+    flex: 0;
+    margin: 10px;
+    
+    background-color:rgb(255, 255, 255);
+    width: auto;
+    height: auto;
+    border-style: outset;
+}
+span:hover{
+    background-color: lightsalmon;
+    border-style: inset;
+}
+button:hover{
+    background-color: lightsalmon;
+}
+@media (min-width: 815px){
 .flexParent{ display:flex;
             flex-direction: row;
             height: 100%;
-}
-
-.button{
-    background-color: rgb(204, 231, 254);
+            margin: 5px;
+            gap: 20px;
+            padding: 10px;
+            border: #000000 solid;
 }
 
 .sidebar{
@@ -33,43 +103,48 @@
     border: double #000000;
     background-color: rgb(217, 200, 194);
     width: 300px;
-    height: 100%;
+    height: auto;
+
+
 }
 
 .mainContent{
-    flex: 1;
+    flex: auto;
     margin: 0;
     border: double #000000;
     background-color: rgb(227, 227, 227);
-    height: 100%;
+    height: auto;
+    min-width: 300px;
 }
 
 .rerorero{
     margin: 0;
     flex: 1;
     height: auto;
+    
 }
 
 
 }
-@media (max-width: 500px){
+@media (max-width: 815px){
 .flexParent{ display:flex;
             flex-direction: column;
             height: 100%;
+            margin: 20px;
 }
 
 .sidebar{
     flex:auto;
     margin: 0;
-    border: double #ffea00;
-    background-color: darksalmon;
+    border: double #000000;
+    background-color: rgb(217, 200, 194);
 
 }
 
 .mainContent{flex: 1;
     margin: 0;
-    border: double #ffea00;
-    background-color: rgb(193, 193, 193);
+    border: double #000000;
+    background-color: rgb(227, 227, 227);
 }
 
 .rerorero{
@@ -79,3 +154,4 @@
 }
 
 }
+

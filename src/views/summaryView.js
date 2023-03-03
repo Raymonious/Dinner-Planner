@@ -4,10 +4,12 @@ import {sortIngredients} from "../utilities.js";
 function SummaryView(props){
     return (
             <div className="debug">
-              Summary for <span title="nr guests">{props.people}</span> persons:
+              <div class = "bor">Summary for <span title="nr guests">{props.people}</span> persons: 
+              <button class = "right button" onClick={backToSearchACB}>To Search!</button>
+              </div>
               <table>
                 <thead>
-                  <tr>
+                  <tr >
                     <th>Name</th>
                     <th>Aisle</th>
                     <th>Quantity</th>
@@ -24,7 +26,7 @@ function SummaryView(props){
                       // TODO once the table rendering works, sort ingredients before mapping. Import the needed function from utilities.js  
                   }
                 </tbody> 
-                <button class = "button" onClick={backToSearchACB}>To Search!</button>
+                
 
               </table>
             </div>

@@ -1,6 +1,6 @@
 function SearchFormView(aa){
     return(
-        <div>
+        <div class = "bor">
             <input onChange = {putTextACB}></input>
             <select class = "button" onChange={chooseTypeACB}>
                 <option>Choose:</option>

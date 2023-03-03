@@ -21,7 +21,9 @@ const db= getDatabase(app)
 
 //root firebase path of group 06
 const PATH="dinnerModel06";
-const rf= ref(db, PATH+"/demo");
+const rf= ref(db, PATH+"/jiuzhuandachang");
+
+
 
 
 
@@ -49,12 +51,14 @@ function persistenceToModel(persistedData, model){
     // TODO return a promise
     if(!persistedData){
         model.setNumberOfGuests(2);
-        model.dishes = []
+        model.dishes = [];
     }
     else{
         model.setNumberOfGuests(persistedData.numberOfGuests);
         model.setCurrentDish(persistedData.currentDish);
+        if (persistedData.dishes){
         getMenuDetails(persistedData.dishes).then(updateDishACB);
+        }
 
         function updateDishACB(dishes){
             model.dishes = dishes;

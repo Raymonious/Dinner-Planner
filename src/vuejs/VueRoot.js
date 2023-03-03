@@ -41,7 +41,7 @@ const router= createRouter({
 
 /*Create Root component replacing previously used app.js using Composition API*/
 const VueRoot = {
-    props: ["myModel"],
+    props: ["m"],
     setup(){
         const firebasePromiseState = reactive({});
 
@@ -65,7 +65,6 @@ const VueRoot = {
         };
     },
 };
-
 
 
 export  {VueRoot, router}

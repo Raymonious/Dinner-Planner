@@ -1,24 +1,24 @@
 function DetailsView(aa){
     return(
         <div>
-            <h1>{aa.dishData.title} </h1>
-            <div>
-            <table border = {5} width = {'400'}><tbody><tr>
-                <td><img src = {aa.dishData.image} height = {'100'} width = {'100'}></img></td>
+            <div class = "box1 title und">{aa.dishData.title} </div>
+            <div class = "box ">
+            <table  width = {'400'}><tbody><tr>
+                <td><img src = {aa.dishData.image} height = {'100'} ></img></td>
                 <tr><td>Price: </td><td>{aa.dishData.pricePerServing}</td></tr>
                 <tr><td>for {aa.guests} guests: </td><td>{aa.guests * aa.dishData.pricePerServing}</td></tr>
             </tr></tbody></table></div>
 
-            <div>
-                <table border = {5} width = {'400'}><tbody>
-                    <tr> <h2>Ingredients: </h2></tr>
+            <div class = "box">
+                <table width = {'400'}><tbody>
+                    <tr class = "title"> Ingredients: </tr>
                     <tr class = "bold"> <td>Name</td><td>Amount</td><td>Unit</td></tr>
                     {aa.dishData.extendedIngredients.map(getIngredientCB)}
                 </tbody></table></div>
            
-            <div>
-                <table border = {5} class = "block" width = {'400'}><tbody>
-                    <tr> <h2>Instruction: </h2></tr>
+            <div class = "box">
+                <table width = {'400'}><tbody>
+                    <tr class = "title"> Instruction: </tr>
                     <tr>{aa.dishData.instructions}</tr>
                     <tr><a href = {aa.dishData.sourceUrl}>More information</a></tr>
                 </tbody></table></div>
