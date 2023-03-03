@@ -3,9 +3,9 @@ import { dishType, menuPrice, sortDishes} from "../utilities";
 function SidebarView(pikachu){
     return (
         <div>
-         <button disabled = {pikachu.number > 1 ? false : true} onClick = {minusNumACB} >-</button>
+         <button class = "button" disabled = {pikachu.number > 1 ? false : true} onClick = {minusNumACB} >-</button>
          {pikachu.number}   
-         <button onClick = {plusNumACB}>+</button>   
+         <button class = "button" onClick = {plusNumACB}>+</button>   
 
          <table>
                 <thead>
@@ -31,7 +31,7 @@ function SidebarView(pikachu){
 
    function dishesTableRowCB(dish){
     return <tr key={dish.id}>
-            <td><button onClick = {xPressedACB}>x</button></td>
+            <td><button class = "button" onClick = {xPressedACB}>x</button></td>
              <td class="center"><a href = "#/details" onClick = {linkDishACB}>{dish.title}</a></td>
              <td class="center">{dishType(dish)}</td>
              <td class="right">{(dish.pricePerServing * pikachu.number).toFixed(2)}</td>

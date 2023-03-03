@@ -24,7 +24,7 @@ function SummaryView(props){
                       // TODO once the table rendering works, sort ingredients before mapping. Import the needed function from utilities.js  
                   }
                 </tbody> 
-                <button onClick={backToSearchACB}>To Search!</button>
+                <button class = "button" onClick={backToSearchACB}>To Search!</button>
 
               </table>
             </div>

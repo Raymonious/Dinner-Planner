@@ -21,10 +21,8 @@ const db= getDatabase(app)
 
 //root firebase path of group 06
 const PATH="dinnerModel06";
-const rf= ref(db, PATH+"/test4");
-const aModel= new DinnerModel(5, [{id:42}, {id:13}]); 
-aModel.setCurrentDish(13);
-set(rf, modelToPersistence(aModel));
+const rf= ref(db, PATH+"/demo");
+
 
 
 

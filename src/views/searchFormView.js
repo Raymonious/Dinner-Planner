@@ -2,12 +2,12 @@ function SearchFormView(aa){
     return(
         <div>
             <input onChange = {putTextACB}></input>
-            <select onChange={chooseTypeACB}>
+            <select class = "button" onChange={chooseTypeACB}>
                 <option>Choose:</option>
                 {aa.dishTypeOptions.map(searchOptionsCB)}
             </select>
-            <button onClick = {startSearchACB}>Search!</button>
-            <button onClick = {toSummanyACB}>Summary</button>
+            <button class = "button" onClick = {startSearchACB}>Search!</button>
+            <button class = "button" onClick = {toSummanyACB}>Summary</button>
 
         </div>
 

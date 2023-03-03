@@ -24,8 +24,8 @@ function DetailsView(aa){
                 </tbody></table></div>
             
             <div>
-                <button disabled = {aa.isDishInMenu} onClick = {menuAddACB}>Add to menu!</button>
-                <button onClick={dishCancleACB}>Cancel</button>
+                <button class = "button" disabled = {aa.isDishInMenu} onClick = {menuAddACB}>Add to menu!</button>
+                <button class = "button" onClick={dishCancleACB}>Cancel</button>
             </div>
         </div>
     );

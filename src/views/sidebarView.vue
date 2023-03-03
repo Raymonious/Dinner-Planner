@@ -25,13 +25,13 @@ function xPressedACB(opt){
 </script>
 <template>
 <div>
-         <button v-bind:disabled = "isButtonDiabled" @click = "minusNumACB" >-</button>{{props.number}}<button @click = "plusNumACB">+</button>   
+         <button v-bind:disabled = "isButtonDiabled" class = "button" @click = "minusNumACB" >-</button>{{props.number}}<button class = "button" @click = "plusNumACB">+</button>   
          <table>
                 <th>
                 </th>
                 <tbody>
                 <tr v-for = "opt in sortDishes(props.dishes)"> 
-                <td ><button @click = "xPressedACB(opt)">x</button></td>
+                <td ><button class = "button" @click = "xPressedACB(opt)">x</button></td>
                   <td><a href = "#details" @click = "linkDishACB(opt)">{{opt.title}}</a></td>
                   <td>{{dishType(opt)}}</td>
                   <td>{{(opt.pricePerServing * props.number).toFixed(2)}}</td>

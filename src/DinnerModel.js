@@ -97,13 +97,11 @@ class DinnerModel{
     }
 
     setSearchQuery(searchTxt){
-        if(!this.searchParams["query"]) this.searchParams = {query:searchTxt, ...this.searchParams};
-        else this.searchParams["query"] = searchTxt;
+        this.searchParams["query"] = searchTxt;
     }
 
     setSearchType(searchType){
-        if(!this.searchParams["type"]) this.searchParams = {type:searchType, ...this.searchParams};
-        else this.searchParams["type"] = searchType;
+        this.searchParams["type"] = searchType;
     }
 
     doSearch(searchParams){

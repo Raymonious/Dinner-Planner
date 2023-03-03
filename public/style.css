@@ -23,10 +23,15 @@
             height: 100%;
 }
 
+.button{
+    background-color: rgb(204, 231, 254);
+}
+
 .sidebar{
     flex:0;
     margin: 0;
-    border: double #ffea00;
+    border: double #000000;
+    background-color: rgb(217, 200, 194);
     width: 300px;
     height: 100%;
 }
@@ -34,7 +39,8 @@
 .mainContent{
     flex: 1;
     margin: 0;
-    border: double #ffea00;
+    border: double #000000;
+    background-color: rgb(227, 227, 227);
     height: 100%;
 }
 
@@ -56,11 +62,14 @@
     flex:auto;
     margin: 0;
     border: double #ffea00;
+    background-color: darksalmon;
+
 }
 
 .mainContent{flex: 1;
     margin: 0;
     border: double #ffea00;
+    background-color: rgb(193, 193, 193);
 }
 
 .rerorero{

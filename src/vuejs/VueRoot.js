@@ -6,7 +6,10 @@ import Details from "./detailsPresenter.js";
 import Search from "./searchPresenter.js"; 
 import Sidebar from "./sidebarPresenter.js"; 
 import Summary from "./summaryPresenter.js"; 
-import firebaseModel from "../firebaseModel.js";
+import promiseNoData from "../views/promiseNoData.js";
+import resolvePromise from "../resolvePromise.js";
+import { onMounted, onUnmounted } from "vue";
+import { firebaseModelPromise } from "../firebaseModel.js";
 
 
 
@@ -40,13 +43,25 @@ const router= createRouter({
 const VueRoot = {
     props: ["myModel"],
     setup(){
+        const firebasePromiseState = reactive({});
+
+        function bornACB(){
+            resolvePromise(firebaseModelPromise(myModel), firebasePromiseState)
+        }
+        function beGoneACB(){
+               console.log("bye");
+        }
+        onMounted(bornACB);
+        onUnmounted(beGoneACB);
+        
         return function renderAppACB(){
-            return(<div>
+            return(
+                promiseNoData(firebasePromiseState)||
                   <div class = "flexParent">
                   <div><Sidebar class = "sidebar" model={myModel}/></div>
                   <div><RouterView class = "mainContent"/></div>
                   </div>
-                  </div>);
+                  );
         };
     },
 };
